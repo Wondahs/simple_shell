@@ -14,6 +14,7 @@
 #include "eprintf.h"
 #include <fcntl.h>
 #include <errno.h>
+#include <string.h>
 
 extern char **environ;
 
@@ -88,5 +89,7 @@ char *free_strdup(char *s);
 void cleanup(cmd_t *cmmds, cmd_t *args);
 int home(cmd_t *args);
 int oldpwd(cmd_t *args);
+char *get_cwd();
+void change_dir(char *dir);
 
 #endif /* MAIN_H */
