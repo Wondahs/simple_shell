@@ -1,3 +1,31 @@
 ## Version 0.1 (6-09-2023)
+- Preliminary research and testing on allowed functions.
+- Creation of custom commands: _strlen, _strncmp, _strdup, _strcat.
+- Set up while loop to allow interactive mode.
 
-- Preliminary research and testing on allowed functions.- Creation of custom
+## Version 0.1.1 (10-09-2023)
+- Fixed memory leaks.
+- Added support for environment vaiables.
+- Created custom getline function and custom printf to handle output to stdout.
+- More optimizations.
+
+## Version 0.2 (12-09-2023)
+- Added support for passing commands wit absolute path.
+- Handled built-in exit commands.
+
+## Version 0.3 (15-09-2023)
+- Added check for piped commands. Shell loop should not continue if command was piped.
+- Handled EOF condition
+- Created buffer to reduce number of read() calls and improve performance.
+
+## Version 0.4 (19-09-2023)
+- Added support for command separator ";"
+- Can now read commands from file passed as argv[1].
+- Fixed Betty related issues
+- Fixed memory leaks
+
+## Version 0.5 (20-09-2023)
+- Added support for setenv and unsetenv commands.
+- More betty fixes
+- Added support for cd.
+- More optimizations.
