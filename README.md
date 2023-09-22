@@ -6,6 +6,7 @@ User Guide
 The simple shell is build with functions that implement structures, system call and functions of libraries like <sys/types.h> <sys/stat.h> that together read commands, which shows the content in a directory and it files etc.
 
 Installation Guide
+
 Download the project in this address: https://github.com/Wondahs/simple_shell
 
 Compilation
