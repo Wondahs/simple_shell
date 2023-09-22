@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
 	copy_env();
 	cmmds = init_cmd_t();
 	args = init_cmd_t();
+	args->n_var_count = 0;
 	while (!args->piped)
 	{
 		if (argc == 2)

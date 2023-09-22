@@ -4,40 +4,41 @@
  *_setenv - Sets @variable as an environment variable wih value @value
  *@variable: Variable to set.
  *@value: Value of @variable
- *
+ *@args: Pointer to struct containing commands information.
  *Return: 0 if success, -1 if fail.
  */
-int _setenv(char *variable, char *value)
+int _setenv(char *variable, char *value, cmd_t *args)
 {
 	int i = 0, j;
-	char *new_var, **new_env, *temp;
+	char new_var[1024];
+	char **new_env;
 
 	if (!variable || !value)
 		return (-1);
-	temp = malloc(_strlen(variable) + _strlen(value) + 2);
-	new_var = _strdup(variable);
-	temp = _strcpy(temp, new_var);
-	free(new_var);
-	new_var = temp;
+
+	_strcpy(new_var, variable);
 	_strcat(new_var, "=");
 	_strcat(new_var, value);
+	args->new_vars[args->n_var_count] = _strdup(new_var);
 	for (i = 0; environ[i] != NULL; i++)
 	{
 		if (_strncmp(environ[i], variable, _strlen(variable)) == 0)
 		{
-			environ[i] = _strdup(new_var);
-			free(new_var);
+			environ[i] = args->new_vars[args->n_var_count];
+			args->n_var_count += 1;
+			args->called_setenv = true;
 			return (0);
 		}
 	}
 	new_env = (char **)malloc((i + 3) * sizeof(char *));
 	for (j = 0; environ[j] != NULL; j++)
 		new_env[j] = environ[j];
-	new_env[j] = _strdup(new_var);
+	new_env[j] = args->new_vars[args->n_var_count];
 	new_env[j + 1] = NULL;
-	free(new_var), free(environ);
-	new_var = NULL;
+	free(environ);
 	environ = new_env;
+	args->n_var_count += 1;
+	args->called_setenv = true;
 	return (0);
 }
 
@@ -104,5 +105,13 @@ void free_cmd_t(cmd_t *cmmd)
 	{
 		free(cmmd->args[i]);
 	}
+	if (cmmd->called_setenv)
+	{
+		for (i = 0; i < cmmd->n_var_count; i++)
+		{
+			free(cmmd->new_vars[i]);
+		}
+	}
+
 	free(cmmd);
 }

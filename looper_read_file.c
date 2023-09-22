@@ -49,6 +49,7 @@ cmd_t *init_cmd_t()
 	cmmds->arg_count = 0;
 	cmmds->piped = false;
 	cmmds->foundPath = true;
+	cmmds->called_setenv = false;
 	return (cmmds);
 }
 

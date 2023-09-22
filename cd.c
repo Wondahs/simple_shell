@@ -9,7 +9,8 @@
 void cd(cmd_t *args, char *argv_0, int cmd_count)
 {
 	char *arg = args->args[1];
-	char current_dir[1024];
+	char current_dir[10240];
+	char *new_pwd;
 
 	(void)cmd_count;
 	(void)argv_0;
@@ -31,22 +32,16 @@ void cd(cmd_t *args, char *argv_0, int cmd_count)
 	}
 	else
 	{
-		int len = _strlen(arg);
-
-		if (arg[len - 1] != '/')
-		{
-			arg[len++] = '/';
-			arg[len] = '\0';
-		}
-
 		if (chdir(arg) == -1)
 		{
 			perror("cd");
 			return;
 		}
 	}
-	_setenv("OLDPWD", current_dir);
-	_setenv("PWD", getcwd(NULL, 0));
+	new_pwd = getcwd(NULL, 0);
+	_setenv("OLDPWD", current_dir, args);
+	_setenv("PWD", new_pwd, args);
+	free(new_pwd);
 }
 
 /**
@@ -106,8 +101,10 @@ void cleanup(cmd_t *cmmds, cmd_t *args)
 {
 	if (args->foundPath == false)
 	{
-		free(cmmds), free(args), free(environ);
-		exit(127);
+		free_cmd_t(args);
+		free(cmmds), free(environ);
+		exit (127);
 	}
-	free(cmmds), free(args), free(environ);
+	free_cmd_t(args);
+	free(cmmds), free(environ);
 }

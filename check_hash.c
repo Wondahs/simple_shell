@@ -56,6 +56,7 @@ bool cmd_cd(cmd_t *args, cmd_t *cmmds, int cmd_count, int i, char *argv_0)
 	(void)cmmds;
 	(void)i;
 	cd(args, argv_0, cmd_count);
+	args->called_setenv = true;
 	free_args(args->args, args->arg_count);
 	return (true);
 }

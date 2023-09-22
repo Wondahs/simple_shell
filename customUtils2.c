@@ -1,6 +1,15 @@
 #include "main.h"
 
 /**
+ * This file contains the following functions:
+ * _getline
+ * _strcat
+ * _strtok
+ * _strcpy
+ * read_buffer
+ */
+
+/**
  * _getline - Read a line from a file descriptor
  * and dynamically resize the buffer.
  * @lineptr: A pointer to a buffer where the line will be stored.

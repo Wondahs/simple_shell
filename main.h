@@ -40,7 +40,9 @@ typedef struct Buffer buff_t;
  * @piped: Tells if command as was passed at terminal or not.
  * If terminal, piped is false.
  * @foundPath: True if path to command was found.
- *
+ * @n_var_count: Index of new environment variable array
+ * @new_vars: Array holding new environment variables.
+ * @called_setenv: True if _setenv has been called, to enable freeing new_vars
  */
 typedef struct Commands
 {
@@ -48,6 +50,9 @@ typedef struct Commands
 	int arg_count;
 	bool piped;
 	bool foundPath;
+	int n_var_count;
+	char *new_vars[1024];
+	bool called_setenv;
 } cmd_t;
 
 /**
@@ -88,7 +93,7 @@ void looper(cmd_t *cmmds, cmd_t *args, char *argv_0, int *cmd_count);
 char *read_file(char *input_file, char *argv_0, cmd_t *cmmds, cmd_t *args);
 char *rmv_space(char *cmd);
 char *rmv_double(char *cmd, char c);
-int _setenv(char *variable, char *value);
+int _setenv(char *variable, char *value, cmd_t *args);
 int _unsetenv(char *variable);
 bool sCases(cmd_t *cmmds, cmd_t *args, int cmd_count,
 		int i, char *argv_0);

@@ -43,7 +43,7 @@ bool sCases(cmd_t *cmmds, cmd_t *args, int cmd_count,
  */
 bool cmd_setenv(cmd_t *args, cmd_t *cmmds, int cmd_count, int i, char *argv_0)
 {
-	int condition = _setenv(args->args[1], args->args[2]);
+	int condition = _setenv(args->args[1], args->args[2], args);
 
 	(void)cmmds;
 	(void)cmd_count;

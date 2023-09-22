@@ -1,161 +1,97 @@
 #include "main.h"
 
 /**
- *cl_exec - Checks if command exists and calls execve
- *@cmmds: Pointer to struct containing command information
- *@args: Pointer to struct of arrays containing command information
- *@cmd_count: Number of commands carried out
- *@arg: Name of shell program(Contained at argv[0])
- *Return: Nothing
- */
-void cl_exec(cmd_t *cmmds, cmd_t *args, int cmd_count, char *arg)
-{
-	char *fullPath;
-
-	if (count_slash(args->args[0]))
-		fullPath = abs_path(args->args[0]);
-	else
-		fullPath = checkPath(args->args[0]);
-	if (fullPath == NULL)
-	{
-		args->foundPath = false;
-		e_printf("%s: %i: %s: not found\n", arg, cmd_count, args->args[0]);
-		/* Free allocated memory */
-		free_args(args->args, args->arg_count);
-		free(fullPath);
-	}
-	else
-	{
-		args->foundPath = true;
-		free(args->args[0]);
-		args->args[0] = fullPath;
-		execute(args, cmmds, cmd_count);
-	}
-}
-
-/**
- *rmv_space - Removes unnecessary character from input string
- *@cmd: Input string
+ *count_slash - Counts number of forward slashes in an input string
+ *@str: Input string
  *
- *Return: Corrected string
- */
-char *rmv_space(char *cmd)
-{
-	int i, j = 0;
-	char *cmd_clean;
-	bool prev_space = (cmd[0] == ' ' || cmd[0] == '\t');
-
-	cmd_clean = malloc(_strlen(cmd) + 1);
-
-	for (i = 0; cmd[i] != '\0'; i++)
-	{
-		if (cmd[i] == ' ' || cmd[i] == '\t')
-		{
-			if (!prev_space)
-				cmd_clean[j++] = cmd[i];
-			prev_space = true;
-		}
-		else
-		{
-			cmd_clean[j++] = cmd[i];
-			prev_space = false;
-		}
-	}
-	cmd_clean[j] = '\0';
-	free(cmd);
-	cmd = cmd_clean;
-	return (cmd);
-}
-
-/**
- *exit_atoi - A string-to-integer converter for exit condition
- *@str: String to convert
+ *This function is useful to check if a command was passed using
+ *its absolute path, for example "/bin/ls" instead of "ls."
  *
- *
- *Return: Integer if successful, -1 if non-numeric character found in input
+ *Return: Number of forward slashes
  */
-int exit_atoi(char *str)
+int count_slash(char *str)
 {
-	int i, len = 0;
-	int total = 0;
+	int i, len, slash = 0;
 
 	len = _strlen(str);
 	for (i = 0; i < len; i++)
 	{
-		if (str[i] >= '0' && str[i] <= '9')
-		{
-			total = (total << 1) + (total << 3);
-			total += (str[i] - '0');
-		}
-		else
-			return (-1);
+		if (str[i] == '/')
+			slash++;
 	}
-	return (total);
+	return (slash);
 }
 
 /**
- *_ext - Handles exit condition
- *@cmmds: Commands separated by ";".
- *@args: Current Array containing arguments being executed
- *@idx: Current index of args.
- *@cCt: Number of commands already passed to shell
- *@arg: Name of shell program, held at argv[0].
+ *abs_path - Checks if absolute path passed exists.
+ *@str: Command passed.
  *
- *Return: Nothing
+ *Return: Absolute path if it exists, and NULL if it does not
  */
-void _ext(cmd_t *cmmds, cmd_t *args, int cCt, int idx, char *arg)
+char *abs_path(char *str)
 {
-	int exit_num;
+	char *cmd;
 
-	if (args->args[1] == NULL && args->foundPath == true)
+	cmd = _strdup(str);
+	if (cmd == NULL)
 	{
-		free(cmmds->args[idx]);
-		free_args(args->args, args->arg_count);
-		free(cmmds), free(args);
-		free(environ);
-		exit(0);
+		perror("abs_path");
+		return (NULL);
 	}
-	else if (args->args[1] == NULL && args->foundPath == false)
-	{
-		free(cmmds->args[idx]);
-		free_args(args->args, args->arg_count);
-		free(cmmds), free(args), free(environ);
-		exit(2);
-	}
-
-	exit_num = exit_atoi(args->args[1]);
-	if (exit_num == -1)
-	{
-		e_printf("%s: %i: %s: Illegal number:", arg, cCt, args->args[0]);
-		e_printf(" %s\n", args->args[1]);
-		free(cmmds->args[idx]);
-		free_args(args->args, args->arg_count);
-		free(cmmds), free(args), free(environ);
-		exit(2);
-	}
-	else
-	{
-		free(cmmds->args[idx]);
-		free_args(args->args, args->arg_count);
-		free(cmmds), free(args), free(environ);
-		exit(exit_num);
-	}
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
+	return (NULL);
 }
 
 /**
- * free_args - Frees argument vector
- * @args: Vector to free
- * @num_token: Number of tokens in vector
+ *get_cmd - Extracts command if absolute path was passed.
+ *@str: Absolute path of command.
  *
- * Return: Nothing
+ *
+ *Return: Command, or NULL if failed.
  */
-void free_args(char *args[], int num_token)
+char *get_cmd(char *str)
 {
-	int i;
+	int i, j = 0, slash_point = 0, len;
+	char *cmd;
 
-	for (i = 0; i < num_token; i++)
+	len = _strlen(str);
+	for (i = 0; i < len; i++)
 	{
-		free(args[i]);
-		args[i] = NULL;
+		if (str[i] == '/')
+			slash_point = i;
 	}
+	cmd = malloc(len - slash_point);
+	if (!cmd)
+	{
+		perror("get_cmd");
+		return (NULL);
+	}
+	for (i = slash_point; i < len; i++)
+		cmd[j++] = str[i];
+	cmd[j] = '\0';
+	return (cmd);
+}
+
+/**
+ *_realloc - Used with _getline to reallocate memory when necessary.
+ *@lineptr: Double pointer to array used to store line.
+ *@n: Size of memory to allocate.
+ *@tBytesRead: Total byted read into lineptr.
+ *
+ *Return: lineptr with specified memory on success, or NULL if failed
+ */
+char *_realloc(char **lineptr, int n, ssize_t tBytesRead)
+{
+	ssize_t i;
+	char *temp;
+
+	temp = (char *)malloc(n);
+	if (!temp)
+		return (NULL);
+	for (i = 0; i < tBytesRead; i++)
+		temp[i] = (*lineptr)[i];
+	free(*lineptr);
+	*lineptr = temp;
+	return (*lineptr);
 }
