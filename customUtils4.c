@@ -120,7 +120,7 @@ void _ext(cmd_t *cmmds, cmd_t *args, int cCt, int idx, char *arg)
 		free(cmmds->args[idx]);
 		free_args(args->args, args->arg_count);
 		free(cmmds), free(args), free(environ);
-		exit(127);
+		exit(2);
 	}
 
 	exit_num = exit_atoi(args->args[1]);

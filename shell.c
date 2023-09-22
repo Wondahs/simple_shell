@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 	{
 		if (argc == 2)
 		{
-			cmd = read_file(argv[1], argv[0]);
+			cmd = read_file(argv[1], argv[0], cmmds, args);
 			cmd = replace_char(cmd, '\n', ';');
 			cmd = rmv_double(cmd, ';');
 			args->piped = true;

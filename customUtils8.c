@@ -89,7 +89,7 @@ int oldpwd(cmd_t *args)
 		args->foundPath = false;
 		return (-1);
 	}
-	_printf("%s,\n", oldpwd);
+	_printf("%s\n", oldpwd);
 	args->foundPath = true;
 	return (0);
 }

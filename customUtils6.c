@@ -16,6 +16,9 @@ void looper(cmd_t *cmmds, cmd_t *args, char *argv_0, int *cmd_count)
 	for (i = 0; i < cmmds->arg_count; i++)
 	{
 		cmmds->args[i] = rmv_space(cmmds->args[i]);
+		cmmds->args[i] = check_hash(cmmds->args[i]);
+		if (cmmds->args[i] == NULL)
+			continue;
 		args->arg_count = tokenize_cmd(cmmds->args[i], args->args, " ");
 		if (sCases(cmmds, args, *cmd_count, i, argv_0))
 		{
@@ -53,11 +56,12 @@ cmd_t *init_cmd_t()
  *read_file - Reads file.
  *@input_file: Name of file.
  *@argv_0: Name of program, held in argv[0].
- *
+ *@cmmds: Pointer to struct containing commands information.
+ *@args: Pointer to struct containing commands information.
  *
  *Return: Copy of buffer containing file content
  */
-char *read_file(char *input_file, char *argv_0)
+char *read_file(char *input_file, char *argv_0, cmd_t *cmmds, cmd_t *args)
 {
 	int file;
 	char buff[1024];
@@ -72,8 +76,9 @@ char *read_file(char *input_file, char *argv_0)
 	file = open(input_file, O_RDONLY);
 	if (file == -1)
 	{
-		e_printf("%s: 0: cannot open %s: No such file\n", argv_0, input_file);
-		exit(2);
+		e_printf("%s: 0: Can't open %s\n", argv_0, input_file);
+		args->foundPath = false;
+		cleanup(cmmds, args);
 	}
 	buff[0] = '\0';
 	while (1)
@@ -85,14 +90,16 @@ char *read_file(char *input_file, char *argv_0)
 		if (bytesRead == -1 || file == -1)
 		{
 			e_printf("%s: 0: cannot read %s\n", argv_0, input_file);
-			exit(2);
+			args->foundPath = false;
+			cleanup(cmmds, args);
 		}
 	}
 	buff[tBytesRead] = '\0';
 	if (close(file) == -1)
 	{
 		e_printf("%s: 0: cannot close %s\n", argv_0, input_file);
-		exit(errno);
+		args->foundPath = false;
+		cleanup(cmmds, args);
 	}
 	return (_strdup(buff));
 }

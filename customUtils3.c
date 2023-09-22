@@ -16,7 +16,7 @@ char *checkPath(char *cmd)
 	char *token, *token_cpy, *full_path, *env_cpy = NULL;
 
 	if (envir == NULL)
-		perror("_getenv");
+		return (NULL);
 	/* Duplicate PATH*/
 	env_cpy = _strdup(envir);
 
@@ -133,6 +133,7 @@ void execute(cmd_t *args, cmd_t *cmmds, int cmd_count)
 		wait(&status);
 		if (WEXITSTATUS(status) != 0)
 		{
+			args->foundPath = false;
 			if (cmmds->arg_count == cmd_count && args->piped)
 			{
 				free_cmd_t(args);

@@ -50,6 +50,17 @@ typedef struct Commands
 	bool foundPath;
 } cmd_t;
 
+/**
+ * struct Scases - Handles special commands
+ * @name: Name of command
+ * @func: Function pointer to function related to @name
+ */
+typedef struct Scases
+{
+	char *name;
+	bool (*func)(cmd_t *, cmd_t *, int, int, char *);
+} sCases_t;
+
 ssize_t _getline(char **lineptr, int *n, int fd, buff_t *buf);
 char *_getenv(char *name);
 int _strlen(char *c);
@@ -74,7 +85,7 @@ ssize_t read_buffer(int fd, buff_t *buf);
 char *_realloc(char **lineptr, int n, ssize_t tBytesRead);
 cmd_t *init_cmd_t();
 void looper(cmd_t *cmmds, cmd_t *args, char *argv_0, int *cmd_count);
-char *read_file(char *input_file, char *argv_0);
+char *read_file(char *input_file, char *argv_0, cmd_t *cmmds, cmd_t *args);
 char *rmv_space(char *cmd);
 char *rmv_double(char *cmd, char c);
 int _setenv(char *variable, char *value);
@@ -88,5 +99,17 @@ char *free_strdup(char *s);
 void cleanup(cmd_t *cmmds, cmd_t *args);
 int home(cmd_t *args);
 int oldpwd(cmd_t *args);
+void print_env(void);
+bool cmd_setenv(cmd_t *args, cmd_t *cmmds,
+		int cmd_count, int i, char *argv_0);
+bool cmd_unsetenv(cmd_t *args, cmd_t *cmmds,
+		int cmd_count, int i, char *argv_0);
+bool cmd_exit(cmd_t *args, cmd_t *cmmds,
+		int cmd_count, int i, char *argv_0);
+bool cmd_env(cmd_t *args, cmd_t *cmmds, int cmd_count,
+		int i, char *argv_0);
+bool cmd_cd(cmd_t *args, cmd_t *cmmds, int cmd_count,
+		int i, char *argv_0);
+char *check_hash(char *str);
 
 #endif /* MAIN_H */

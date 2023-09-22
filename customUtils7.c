@@ -10,12 +10,15 @@
 int _setenv(char *variable, char *value)
 {
 	int i = 0, j;
-	char *new_var, **new_env;
+	char *new_var, **new_env, *temp;
 
 	if (!variable || !value)
 		return (-1);
-	new_var = malloc(_strlen(variable) + _strlen(value) + 2);
-	_strcpy(new_var, variable);
+	temp = malloc(_strlen(variable) + _strlen(value) + 2);
+	new_var = _strdup(variable);
+	temp = _strcpy(temp, new_var);
+	free(new_var);
+	new_var = temp;
 	_strcat(new_var, "=");
 	_strcat(new_var, value);
 	for (i = 0; environ[i] != NULL; i++)
@@ -66,51 +69,6 @@ int _unsetenv(char *variable)
 	free(environ);
 	environ = temp;
 	return (0);
-}
-
-/**
- *sCases - Handles special cases.
- *@cmmds: cmmds
- *@args: args
- *@cmd_count: Number of commands executed.
- *@i: ith command in cmmds.
- *@argv_0: Name of program held in argv[0].
- *
- * Return: True if any special cases.
- */
-bool sCases(cmd_t *cmmds, cmd_t *args, int cmd_count,
-		int i, char *argv_0)
-{
-	int condition = 0;
-
-	if (_strncmp("setenv", args->args[0], _strlen(args->args[0])) == 0)
-	{
-		condition = _setenv(args->args[1], args->args[2]);
-		if (condition == -1)
-			perror("setenv");
-		free_args(args->args, args->arg_count);
-		return (true);
-	}
-	if (_strncmp("unsetenv", args->args[0], _strlen(args->args[0])) == 0)
-	{
-		condition = _unsetenv(args->args[1]);
-		if (condition == -1)
-			perror("unsetenv");
-		free_args(args->args, args->arg_count);
-		return (true);
-	}
-	if (_strncmp("exit", args->args[0], _strlen(args->args[0])) == 0)
-	{
-		_ext(cmmds, args, cmd_count, i, argv_0);
-		return (true);
-	}
-	if (_strncmp("cd", args->args[0], 2) == 0)
-	{
-		cd(args, argv_0, cmd_count);
-		free_args(args->args, args->arg_count);
-		return (true);
-	}
-	return (false);
 }
 
 /**
