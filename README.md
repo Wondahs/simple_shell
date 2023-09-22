@@ -12,7 +12,7 @@ Download the project in this address: https://github.com/Wondahs/simple_shell
 
 Compilation
 
-You should compiled this way:
+You should compiled this way::
 
 gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
 
