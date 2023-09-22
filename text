@@ -1,0 +1,4 @@
+ls /njdjd
+echo $?
+setenv DO /bin/ls
+$DO -last

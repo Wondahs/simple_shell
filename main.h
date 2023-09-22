@@ -43,6 +43,8 @@ typedef struct Buffer buff_t;
  * @n_var_count: Index of new environment variable array
  * @new_vars: Array holding new environment variables.
  * @called_setenv: True if _setenv has been called, to enable freeing new_vars
+ * @expanded: Checks if variable expansion has occurred.
+ * @exit_status: Checks exit status of previous command.
  */
 typedef struct Commands
 {
@@ -53,6 +55,8 @@ typedef struct Commands
 	int n_var_count;
 	char *new_vars[1024];
 	bool called_setenv;
+	bool expanded;
+	int exit_status;
 } cmd_t;
 
 /**
@@ -116,5 +120,8 @@ bool cmd_env(cmd_t *args, cmd_t *cmmds, int cmd_count,
 bool cmd_cd(cmd_t *args, cmd_t *cmmds, int cmd_count,
 		int i, char *argv_0);
 char *check_hash(char *str);
+void expand(cmd_t *args);
+char *i_to_str(int num);
+void expand_variable(cmd_t *args, int i);
 
 #endif /* MAIN_H */

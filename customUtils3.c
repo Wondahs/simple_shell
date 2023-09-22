@@ -137,6 +137,7 @@ void execute(cmd_t *args, cmd_t *cmmds, int cmd_count)
 	else
 	{
 		wait(&status);
+		args->exit_status = WEXITSTATUS(status);
 		if (WEXITSTATUS(status) != 0)
 		{
 			args->foundPath = false;

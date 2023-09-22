@@ -26,6 +26,7 @@ void looper(cmd_t *cmmds, cmd_t *args, char *argv_0, int *cmd_count)
 			(*cmd_count)++;
 			continue;
 		}
+		expand(args);
 		cl_exec(cmmds, args, *cmd_count, argv_0);
 		free(cmmds->args[i]);
 		(*cmd_count)++;
