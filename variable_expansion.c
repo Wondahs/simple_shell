@@ -37,6 +37,8 @@ void expand(cmd_t *args)
 				free(temp);
 				return;
 			}
+			else if (args->args[i][1] == '\0')
+				return;
 			else
 			{
 				expand_variable(args, i);
