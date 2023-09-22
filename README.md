@@ -26,15 +26,15 @@ Use commands like ls -l for list directories for example:
 	Wonders & Isek7
 $ ls
 
-README.md check_hash.c customUtils3.c customUtils5.c customUtils7.c customUtils.c eprintf_functions.c changelog customUtils2.c customUtils4.c customUtils6.c customUtils8.c e_printf.c eprintf.h printenv.c printf_functions.c printf.c printf.h shell.c special_cases.c
+README.md check_hash.c customUtils3.c cl_exec_exit.c looper_read_file.c customUtils.c eprintf_functions.c changelog customUtils2.c customUtils4.c customUtils6.c setenv_unset_free.c e_printf.c eprintf.h printenv.c printf_functions.c printf.c printf.h shell.c special_cases.c
 
-Commands	Options
+Commands	  Options
 
-ls	-l, -a, -t
+ls	        -l, -a, -t
 
-cd	-, ~, ..
+cd	        -, ~, ..
 
-pwd	Display directory actuall
+pwd	        Display present working directory
 
 Authors
 
