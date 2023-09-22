@@ -32,7 +32,7 @@ void cd(cmd_t *args, char *argv_0, int cmd_count)
 	{
 		if (chdir(arg) == -1)
 		{
-			e_printf("%s: %d: cd: can't cd into %s\n", argv_0, cmd_count, arg);
+			e_printf("%s: %d: cd: can't cd to %s\n", argv_0, cmd_count, arg);
 			return;
 		}
 	}
