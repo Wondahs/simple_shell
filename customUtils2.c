@@ -1,13 +1,11 @@
 #include "main.h"
 
-/**
- * This file contains the following functions:
- * _getline
- * _strcat
- * _strtok
- * _strcpy
- * read_buffer
- */
+ /* This file contains the following functions:*/
+ /* _getline*/
+ /* _strcat*/
+ /* _strtok*/
+ /* _strcpy*/
+ /* read_buffer*/
 
 /**
  * _getline - Read a line from a file descriptor

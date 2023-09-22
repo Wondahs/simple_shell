@@ -1,11 +1,10 @@
 #include "main.h"
 
-/** This file contains the following functions:
- * checkPath
- * getPrompt
- * execute
- * tokenize_cmd
- */
+ /* This file contains the following functions: */
+ /* checkPath*/
+ /* getPrompt*/
+ /* execute*/
+ /* tokenize_cmd*/
 
 /**
  *checkPath - Checks if given command can be executed before fork and execve.

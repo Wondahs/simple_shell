@@ -12,8 +12,6 @@ void cd(cmd_t *args, char *argv_0, int cmd_count)
 	char current_dir[10240];
 	char *new_pwd;
 
-	(void)cmd_count;
-	(void)argv_0;
 	if (getcwd(current_dir, sizeof(current_dir)) == NULL)
 	{
 		perror("cd");
@@ -34,7 +32,7 @@ void cd(cmd_t *args, char *argv_0, int cmd_count)
 	{
 		if (chdir(arg) == -1)
 		{
-			perror("cd");
+			e_printf("%s: %d: cd: can't cd into %s\n", argv_0, cmd_count, arg);
 			return;
 		}
 	}
@@ -55,6 +53,8 @@ int home(cmd_t *args)
 	const char *home = _getenv("HOME");
 	int cd;
 
+	if (home == NULL)
+		home = _getenv("PWD");
 	cd = chdir(home);
 	if (cd == -1)
 	{
@@ -77,6 +77,8 @@ int oldpwd(cmd_t *args)
 	const char *oldpwd = _getenv("OLDPWD");
 	int cd;
 
+	if (oldpwd == NULL)
+		oldpwd = _getenv("PWD");
 	cd = chdir(oldpwd);
 	if (cd == -1)
 	{
@@ -103,7 +105,7 @@ void cleanup(cmd_t *cmmds, cmd_t *args)
 	{
 		free_cmd_t(args);
 		free(cmmds), free(environ);
-		exit (127);
+		exit(127);
 	}
 	free_cmd_t(args);
 	free(cmmds), free(environ);
