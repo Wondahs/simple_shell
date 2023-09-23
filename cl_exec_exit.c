@@ -131,7 +131,6 @@ void _ext(cmd_t *cmmds, cmd_t *args, int cCt, int idx, char *arg)
 	}
 	else
 	{
-		free(cmmds->args[idx]);
 		free_cmd_t(args);
 		free(cmmds->args[idx]), free(cmmds), free(environ);
 		exit(exit_num);

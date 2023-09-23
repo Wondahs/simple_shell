@@ -2,3 +2,15 @@ ls /njdjd
 echo $?
 setenv DO /bin/ls
 $DO -last
+ls -la
+hsjs
+env
+unsetenv DO
+echo "Env set"
+env
+cd -
+pwd
+cd .. ; pwd
+cd 
+pwd
+exit 299
